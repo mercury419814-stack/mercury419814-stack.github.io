@@ -1,0 +1,7 @@
+_site/
+.jekyll-cache/
+.bundle/
+.sass-cache/
+*.gem
+*.gemspec
+.DS_Store
