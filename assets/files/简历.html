@@ -1,0 +1,109 @@
+<!-- Important: Replace all template content, especially contact details, with your own information. -->
+
+<!-- Important: When updating your email address, remember to change both the "text" (visible text) and the "link" (underlying hyperlink) fields. -->
+
+<h2 id="教育经历">教育经历</h2>
+
+<p><strong>北京航空航天大学</strong>
+  ~ 本科</p>
+
+<p>计算机科学与技术
+  ~ 2020年09月 - 2024年06月</p>
+
+<h2 id="工作经历">工作经历</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>~ 2024年07月 - 至今
+
+Java后端开发，应用分发团队
+
+- 主要负责用户评论举报内容应用能力、海内外资源爬取平台、黑灰产识别相关能力的建设
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="项目经验">项目经验</h2>
+
+<p><strong>评论举报内容治理</strong>
+  ~ 项目负责人
+  ~ 2025年07月 - 至今</p>
+<ul>
+  <li><strong>项目背景</strong>：针对应用市场覆盖全球（欧/俄/亚非拉）多区域的复杂场景，构建集“自动审核、人工复审、风险挖掘”于一体的内容风控平台，从而满足精细化运营与各地合规要求。</li>
+  <li><strong>架构设计与核心工作</strong>：
+    <ul>
+      <li><strong>LLM 驱动的智能审核体系</strong>：
+        <ul>
+          <li>主导接入公司内部 AIPipeline（基于 Dify），封装标准化 SDK，通过LLM价值判断过滤器，结合风控平台接口调用，将人工审核工作量减少80%，大幅提升审核人效。</li>
+        </ul>
+      </li>
+      <li><strong>全球化差异化配置架构</strong>：
+        <ul>
+          <li>针对国内外站点对于评论展示严格程度等要求不同，支持定制化审核配置（必人审时间、风控回刷等操作），通过Nacos配置实现一套代码多站点部署，注入不同实现类实现功能灵活切换。</li>
+        </ul>
+      </li>
+      <li><strong>高性能数据存储与检索</strong>：
+        <ul>
+          <li>针对评论数据量大且状态流转复杂的特点（可以修改内容、多次被举报下架、申诉），设计了“主表分库分表 + 审核记录表 + 全生命周期事件日志表”的数据模型，确保数据可溯源。</li>
+          <li>实践读写分离思想：写入操作落库 MySQL，读取与复杂检索走 Elasticsearch，保障了审核后台在大数据量下的毫秒级响应体验。</li>
+        </ul>
+      </li>
+      <li><strong>高可用与数据一致性保障</strong>：
+        <ul>
+          <li>设计了完善的<strong>服务降级与熔断策略</strong>：当依赖的 AI 服务或风控中台波动时，自动降级为“人工接管模式”，确保核心业务流程不中断。</li>
+          <li>实现了全链路数据的<strong>最终一致性</strong>，确保审核结果在多个微服务间准确流转并同步至应用市场与游戏中心双端。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>项目成果</strong>：平台上线后日均生成 7K+审核数据，不仅支撑了业务出海的合规需求，还建立了全链路操作审计日志，实现了所有审核操作的可追溯、可定责。</li>
+</ul>
+
+<p><strong>资源爬取平台</strong>
+  ~ Java开发&amp;爬虫脚本开发
+  ~ 2024年09月 - 至今</p>
+
+<ul>
+  <li><strong>项目背景</strong>：面对应用市场早期部分应用版本更新慢、后期保障海外TOP体验应用及商业化应用全上架等问题，构建高并发、高可用的分布式爬虫平台，保障应用资源的实时性与完整性。</li>
+  <li><strong>架构设计</strong>：采用 <strong>Access（接入）- Dispatcher（调度）- Agent（执行）</strong> 三层解耦架构。Access 层统一接收业务需求；Dispatcher 层负责任务分发与负载均衡；Agent 层支持<strong>异构节点执行</strong>（网页爬虫线程节点 &amp; 真机 Box 节点）。</li>
+  <li><strong>核心工作与技术亮点</strong>：
+    <ul>
+      <li><strong>分布式任务调度体系</strong>：基于<strong>生产者-消费者模型</strong>实现了任务协调器与调度器，通过多线程并发处理，将海量爬取需求动态匹配至空闲 Agent 节点，解决了任务堆积与资源浪费问题。</li>
+      <li><strong>高可用实时通讯机制</strong>：设计并实现了 Dispatcher 与 Agent 间的 <strong>WebSocket 长连接</strong>通信方案。引入<strong>双向心跳检测</strong>机制，实现了对Agent状态的秒级监控，一旦节点掉线可在 <strong>1分钟内</strong> 自动感知并触发告警或任务重试。</li>
+      <li><strong>高扩展性的策略设计</strong>：针对不同渠道（Google Play/国内友商）的数据差异，设计了<strong>策略模式/模板方法</strong> 的资源转化器，实现了新渠道接入的<strong>零侵入或低代码配置</strong>，大幅降低了后续维护成本。</li>
+    </ul>
+  </li>
+  <li><strong>项目成果</strong>：成功接入多家主流渠道，支持每日百万级任务调度，除核心爬取业务外，架构的通用性通过了端侧资源收集等边缘业务的验证。</li>
+</ul>
+
+<p><strong>AI应用</strong>
+  ~ 2025年04月 - 至今</p>
+
+<ul>
+  <li>自动化日志巡检工具：构建基于LLM的日志处理工作流，实现模拟登陆、组装Cookie请求获取异常日志；定义ErrorMessage+RelatedLogsCount+TraceId，通过提示词实现复杂逻辑去重及聚合；同时将错误信息在知识库中进行检索，对已知业务异常进行过滤。</li>
+  <li>能够实现对20+个微服务每日巡检30+次，单次巡检耗时1分钟，显著降低人工巡检成本</li>
+  <li>数据库对比工具（待补充、）</li>
+</ul>
+
+<h2 id="专业技能">专业技能</h2>
+
+<p><strong>编程语言</strong>：
+<strong>Java</strong> 基础扎实，理解 <strong>IO/NIO</strong> 模型，熟练掌握 <strong>JUC</strong> 并发编程（锁机制、线程池、AQS 等），具有多线程环境下的开发经验；熟悉 Python、JavaScript 及其相关生态。</p>
+
+<p><strong>主流框架</strong>：
+熟练掌握 <strong>Spring / Spring Boot</strong> 框架，深入理解 <strong>IOC/AOP</strong> 原理、<strong>Bean</strong> 生命周期及自动装配机制；熟悉 <strong>Spring Cloud</strong> 微服务技术栈（如 Nacos、Gateway、Feign 等）；熟练使用 <strong>MyBatis / MyBatis-Plus</strong> 持久层框架，了解其动态 SQL 及缓存机制。</p>
+
+<p><strong>数据库</strong>：
+  熟练掌握 <strong>MySQL</strong> 数据库应用，深入理解 InnoDB 存储引擎（事务隔离级别、索引原理、MVCC 机制）；具备优秀的 SQL 编写能力，有线上慢 SQL 排查与优化实战经验；深入理解 <strong>Redis</strong> 的单线程模型及内存存储结构，熟练掌握核心数据结构及应用场景（缓存/分布式锁/计数器）。</p>
+
+<p><strong>中间件</strong>： 
+熟悉 <strong>Kafka</strong> 消息队列架构，理解其路由策略、高吞吐原理及削峰填谷机制，能处理消息积压、重复消费等常见问题；对于分布式组件，熟悉 <strong>ElasticSearch</strong> 的倒排索引原理及搜索业务落地；熟练使用 <strong>XXL-JOB</strong> 进行分布式任务调度。</p>
+
+<p><strong>工程化与运维</strong>：
+ 熟练使用 Maven 进行项目构建与依赖管理，熟悉基于 Jenkins 的 <strong>CI/CD</strong> 自动化发布流程。具备<strong>服务可观测性</strong>建设经验，了解全链路追踪（Trace）原理及应用（啄木鸟这个名称待确定）。</p>
+
+<p><strong>架构与AI</strong>：
+ 熟悉常用设计模式及数据结构与算法；具备 AI 大模型应用对接经验，熟悉 <strong>LangChain / LangGraph</strong> 框架，了解 Agent 编排及 RAG 流程。</p>
+
+<hr />
