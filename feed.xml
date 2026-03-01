@@ -4,7 +4,7 @@
   <id>https://mercury419814-stack.github.io/</id>
   <title>Mercury</title>
   <subtitle>Mercury's Personal Blog.</subtitle>
-  <updated>2026-03-01T17:48:11+08:00</updated>
+  <updated>2026-03-01T22:06:13+08:00</updated>
   <author>
     <name>Mercury</name>
     <uri>https://mercury419814-stack.github.io/</uri>
@@ -17,6 +17,30 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>接口生成唯一键值对并发问题</title>
+    <link href="https://mercury419814-stack.github.io/posts/unique-key-concurrency-solution/" rel="alternate" type="text/html" title="接口生成唯一键值对并发问题" />
+    <published>2026-03-01T00:00:00+08:00</published>
+  
+    <updated>2026-03-01T00:00:00+08:00</updated>
+  
+    <id>https://mercury419814-stack.github.io/posts/unique-key-concurrency-solution/</id>
+    <content type="text/html" src="https://mercury419814-stack.github.io/posts/unique-key-concurrency-solution/" />
+    <author>
+      <name>Mercury</name>
+    </author>
+
+  
+    
+    <category term="工作总结" />
+    
+  
+
+  <summary>1. 场景与问题  在设备管理业务中，设备号（Code）和设备名（Name）要求全局唯一。  常规做法： 采用 Check-Then-Act 模式。先 Select 查询是否存在，不存在则 Insert。  问题： 在高并发场景下，存在竞态条件（Race Condition）。两个线程可能同时查到”不存在”，然后同时执行插入。此时依赖数据库的 Unique Key 约束兜底，数据库会抛出异常（如 MySQL 的 Error 1062）。  2. 解决方案分级          Level 1（常规）：数据库兜底 + 异常转换      对于并发度不高的 B 端业务，这种冲突概率极低。我们可以捕获 DuplicateKeyException，将其包装为自定义的业务异常（如 BusinessException(“设备号已存在”)）抛给前端。      注意：虽然简单，但高频的唯一键冲突会...</summary>
+
+  </entry>
 
 </feed>
 
