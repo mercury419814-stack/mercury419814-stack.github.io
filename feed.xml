@@ -4,7 +4,7 @@
   <id>https://mercury419814-stack.github.io/</id>
   <title>Mercury</title>
   <subtitle>Mercury's Personal Blog.</subtitle>
-  <updated>2026-03-01T22:06:13+08:00</updated>
+  <updated>2026-03-03T21:03:35+08:00</updated>
   <author>
     <name>Mercury</name>
     <uri>https://mercury419814-stack.github.io/</uri>
@@ -17,6 +17,54 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>Java 并发代码 snippet 分析：Counter 与 volatile</title>
+    <link href="https://mercury419814-stack.github.io/posts/java-counter-volatile-atomic/" rel="alternate" type="text/html" title="Java 并发代码 snippet 分析：Counter 与 volatile" />
+    <published>2026-03-03T00:00:00+08:00</published>
+  
+    <updated>2026-03-03T00:00:00+08:00</updated>
+  
+    <id>https://mercury419814-stack.github.io/posts/java-counter-volatile-atomic/</id>
+    <content type="text/html" src="https://mercury419814-stack.github.io/posts/java-counter-volatile-atomic/" />
+    <author>
+      <name>Mercury</name>
+    </author>
+
+  
+    
+    <category term="工作总结" />
+    
+  
+
+  <summary>public class Counter { 	private int count = 0; 	 	private boolean stopped = false; 	 	public void increment() { 		if (!stopped) { 			count = count + 1; 		} 	} 	 	public void stop() { 		stopped = true; 	} 	 	public int getCount() { 		return count; 	}  }   1. 关于 count 的竞态条件（Race Condition）  count++ 实际上包含了三个步骤：     Read: 从主内存读取 count 到工作内存。   Modify: 在 CPU 寄存器中执行 +1 操作。   Write: 将新值写回工作内存。   如果没有锁...</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>数据库表主键 BIGINT vs VARCHAR 选型</title>
+    <link href="https://mercury419814-stack.github.io/posts/db-primary-key-bigint-vs-varchar/" rel="alternate" type="text/html" title="数据库表主键 BIGINT vs VARCHAR 选型" />
+    <published>2026-03-03T00:00:00+08:00</published>
+  
+    <updated>2026-03-03T00:00:00+08:00</updated>
+  
+    <id>https://mercury419814-stack.github.io/posts/db-primary-key-bigint-vs-varchar/</id>
+    <content type="text/html" src="https://mercury419814-stack.github.io/posts/db-primary-key-bigint-vs-varchar/" />
+    <author>
+      <name>Mercury</name>
+    </author>
+
+  
+    
+    <category term="工作总结" />
+    
+  
+
+  <summary>在分布式系统中，雪花算法（Snowflake）是生成全局唯一 ID 的主流方案。但在数据库建表和 Java 代码实现时经常面临一个选择：ID 到底该用 BIGINT (Long) 还是 VARCHAR (String)？  1. 核心矛盾：性能 vs 兼容性  这个问题的本质，是数据库存储性能与前端语言兼容性之间的博弈。  方案 A：使用 BIGINT (Long)  这是数据库层面的最优解，但对前端（JavaScript）不友好。     MySQL: BIGINT(20)   Java: java.lang.Long   方案 B：使用 VARCHAR (String)  这是为了迁就前端的“偷懒”解法，牺牲了数据库性能。     MySQL: VARCHAR(20)   Java: java.lang.String     2. 为什么数据库层面 BIGINT 完胜？  从 D...</summary>
+
+  </entry>
 
   
   <entry>

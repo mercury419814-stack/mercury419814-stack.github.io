@@ -30,23 +30,23 @@
 
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="接口生成唯一键值对并发问题" />
+<meta property="og:title" content="数据库表主键 BIGINT vs VARCHAR 选型" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="1. 场景与问题" />
-<meta property="og:description" content="1. 场景与问题" />
-<link rel="canonical" href="https://mercury419814-stack.github.io/posts/unique-key-concurrency-solution/" />
-<meta property="og:url" content="https://mercury419814-stack.github.io/posts/unique-key-concurrency-solution/" />
+<meta name="description" content="在分布式系统中，雪花算法（Snowflake）是生成全局唯一 ID 的主流方案。但在数据库建表和 Java 代码实现时经常面临一个选择：ID 到底该用 BIGINT (Long) 还是 VARCHAR (String)？" />
+<meta property="og:description" content="在分布式系统中，雪花算法（Snowflake）是生成全局唯一 ID 的主流方案。但在数据库建表和 Java 代码实现时经常面临一个选择：ID 到底该用 BIGINT (Long) 还是 VARCHAR (String)？" />
+<link rel="canonical" href="https://mercury419814-stack.github.io/posts/db-primary-key-bigint-vs-varchar/" />
+<meta property="og:url" content="https://mercury419814-stack.github.io/posts/db-primary-key-bigint-vs-varchar/" />
 <meta property="og:site_name" content="Mercury" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2026-03-01T00:00:00+08:00" />
+<meta property="article:published_time" content="2026-03-03T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="接口生成唯一键值对并发问题" />
+<meta property="twitter:title" content="数据库表主键 BIGINT vs VARCHAR 选型" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-03-01T00:00:00+08:00","datePublished":"2026-03-01T00:00:00+08:00","description":"1. 场景与问题","headline":"接口生成唯一键值对并发问题","mainEntityOfPage":{"@type":"WebPage","@id":"https://mercury419814-stack.github.io/posts/unique-key-concurrency-solution/"},"url":"https://mercury419814-stack.github.io/posts/unique-key-concurrency-solution/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-03-03T00:00:00+08:00","datePublished":"2026-03-03T00:00:00+08:00","description":"在分布式系统中，雪花算法（Snowflake）是生成全局唯一 ID 的主流方案。但在数据库建表和 Java 代码实现时经常面临一个选择：ID 到底该用 BIGINT (Long) 还是 VARCHAR (String)？","headline":"数据库表主键 BIGINT vs VARCHAR 选型","mainEntityOfPage":{"@type":"WebPage","@id":"https://mercury419814-stack.github.io/posts/db-primary-key-bigint-vs-varchar/"},"url":"https://mercury419814-stack.github.io/posts/db-primary-key-bigint-vs-varchar/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>接口生成唯一键值对并发问题 | Mercury
+  <title>数据库表主键 BIGINT vs VARCHAR 选型 | Mercury
   </title>
 
   <!--
@@ -445,7 +445,7 @@
         
           
             
-              <span>接口生成唯一键值对并发问题</span>
+              <span>数据库表主键 BIGINT vs VARCHAR 选型</span>
             
 
           
@@ -528,6 +528,60 @@
   
 
   
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
 
   
   
@@ -540,6 +594,17 @@
       
         
         
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
       
 
       
@@ -603,7 +668,7 @@
 
 <article class="px-1" data-toc="true">
   <header>
-    <h1 data-toc-skip>接口生成唯一键值对并发问题</h1>
+    <h1 data-toc-skip>数据库表主键 BIGINT vs VARCHAR 选型</h1>
     
 
     <div class="post-meta text-muted">
@@ -620,13 +685,13 @@
 
 <time
   
-  data-ts="1772294400"
+  data-ts="1772467200"
   data-df="ll"
   
     data-bs-toggle="tooltip" data-bs-placement="bottom"
   
 >
-  Mar  1, 2026
+  Mar  3, 2026
 </time>
 
       </span>
@@ -682,9 +747,9 @@
   class="readtime"
   data-bs-toggle="tooltip"
   data-bs-placement="bottom"
-  title="526 words"
+  title="768 words"
 >
-  <em>2 min</em> read</span>
+  <em>4 min</em> read</span>
 
         </div>
       </div>
@@ -693,7 +758,7 @@
 
   
     <div id="toc-bar" class="d-flex align-items-center justify-content-between invisible">
-      <span class="label text-truncate">接口生成唯一键值对并发问题</span>
+      <span class="label text-truncate">数据库表主键 BIGINT vs VARCHAR 选型</span>
       <button type="button" class="toc-trigger btn me-1">
         <i class="fa-solid fa-list-ul fa-fw"></i>
       </button>
@@ -706,7 +771,7 @@
 
     <dialog id="toc-popup" class="p-0">
       <div class="header d-flex flex-row align-items-center justify-content-between">
-        <div class="label text-truncate py-2 ms-4">接口生成唯一键值对并发问题</div>
+        <div class="label text-truncate py-2 ms-4">数据库表主键 BIGINT vs VARCHAR 选型</div>
         <button id="toc-popup-close" type="button" class="btn mx-1 my-1 opacity-75">
           <i class="fas fa-close"></i>
         </button>
@@ -716,42 +781,142 @@
   
 
   <div class="content">
-    <h3 id="1-场景与问题"><span class="me-2">1. 场景与问题</span><a href="#1-场景与问题" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+    <p>在分布式系统中，雪花算法（Snowflake）是生成全局唯一 ID 的主流方案。但在数据库建表和 Java 代码实现时经常面临一个选择：<strong>ID 到底该用 <code class="language-plaintext highlighter-rouge">BIGINT</code> (Long) 还是 <code class="language-plaintext highlighter-rouge">VARCHAR</code> (String)？</strong></p>
 
-<p>在设备管理业务中，设备号（Code）和设备名（Name）要求全局唯一。</p>
+<h2 id="1-核心矛盾性能-vs-兼容性"><span class="me-2">1. 核心矛盾：性能 vs 兼容性</span><a href="#1-核心矛盾性能-vs-兼容性" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<p><strong>常规做法：</strong> 采用 Check-Then-Act 模式。先 Select 查询是否存在，不存在则 Insert。</p>
+<p>这个问题的本质，是<strong>数据库存储性能</strong>与<strong>前端语言兼容性</strong>之间的博弈。</p>
 
-<p><strong>问题：</strong> 在高并发场景下，存在竞态条件（Race Condition）。两个线程可能同时查到”不存在”，然后同时执行插入。此时依赖数据库的 Unique Key 约束兜底，数据库会抛出异常（如 MySQL 的 Error 1062）。</p>
+<h3 id="方案-a使用-bigint-long"><span class="me-2">方案 A：使用 BIGINT (Long)</span><a href="#方案-a使用-bigint-long" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 
-<h3 id="2-解决方案分级"><span class="me-2">2. 解决方案分级</span><a href="#2-解决方案分级" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<ul>
-  <li>
-    <p><strong>Level 1（常规）：数据库兜底 + 异常转换</strong></p>
-
-    <p>对于并发度不高的 B 端业务，这种冲突概率极低。我们可以捕获 DuplicateKeyException，将其包装为自定义的业务异常（如 BusinessException(“设备号已存在”)）抛给前端。</p>
-
-    <p><em>注意：虽然简单，但高频的唯一键冲突会导致 InnoDB 产生大量的间隙锁（Gap Locks），在极端并发下有死锁风险，且异常堆栈构建消耗 CPU。</em></p>
-  </li>
-  <li>
-    <p><strong>Level 2（高并发）：前置防御</strong></p>
-
-    <p>如果业务对并发要求极高（如秒杀抢注），为了保护数据库，可以使用 <strong>Redis 分布式锁</strong> 或 <strong>布隆过滤器</strong> 进行前置拦截，将压力挡在数据库之外。</p>
-  </li>
-</ul>
-
-<h3 id="3-关于自增主键的思考"><span class="me-2">3. 关于自增主键的思考</span><a href="#3-关于自增主键的思考" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<p>对于像”管道编号”这类没有严格业务含义、只要求唯一的字段，直接使用数据库的<strong>自增主键</strong>是最佳选择。</p>
-
-<p><strong>原理分析：</strong></p>
+<p>这是数据库层面的最优解，但对前端（JavaScript）不友好。</p>
 
 <ul>
-  <li><strong>安全性：</strong> 获取自增 ID 的操作是原子的。</li>
-  <li><strong>性能：</strong> 在 innodb_autoinc_lock_mode=1（默认）下，对于简单的 Insert 语句，InnoDB 使用的是轻量级的互斥量（Mutex），分配完 ID 后<strong>立刻释放</strong>，不需要等待事务提交，性能极高。</li>
-  <li><strong>副作用：</strong> 即使事务回滚，已申请的 ID 不会退还，因此自增 ID 可能会出现<strong>不连续（断层）</strong> 的现象，但这在非业务强相关的场景下完全可以接受。</li>
+  <li><strong>MySQL</strong>: <code class="language-plaintext highlighter-rouge">BIGINT(20)</code></li>
+  <li><strong>Java</strong>: <code class="language-plaintext highlighter-rouge">java.lang.Long</code></li>
 </ul>
+
+<h3 id="方案-b使用-varchar-string"><span class="me-2">方案 B：使用 VARCHAR (String)</span><a href="#方案-b使用-varchar-string" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<p>这是为了迁就前端的“偷懒”解法，牺牲了数据库性能。</p>
+
+<ul>
+  <li><strong>MySQL</strong>: <code class="language-plaintext highlighter-rouge">VARCHAR(20)</code></li>
+  <li><strong>Java</strong>: <code class="language-plaintext highlighter-rouge">java.lang.String</code></li>
+</ul>
+
+<hr />
+
+<h2 id="2-为什么数据库层面-bigint-完胜"><span class="me-2">2. 为什么数据库层面 BIGINT 完胜？</span><a href="#2-为什么数据库层面-bigint-完胜" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>从 DBA 和后端架构的角度来看，<strong>必须使用 BIGINT</strong>，原因如下：</p>
+
+<ol>
+  <li><strong>存储空间 (Storage)</strong>
+    <ul>
+      <li><strong>BIGINT</strong>: 固定占用 <strong>8 字节</strong>。</li>
+      <li><strong>VARCHAR</strong>: 雪花 ID 为 19 位，存储需要 <strong>19 字节 + 1 字节长度标识 = 20 字节</strong>。</li>
+      <li><strong>结论</strong>: String 的空间消耗是 Long 的 <strong>2.5 倍</strong>。这不仅浪费磁盘，更浪费宝贵的内存（Buffer Pool 能缓存的索引页变少）。</li>
+    </ul>
+  </li>
+  <li><strong>索引效率 (Index Performance)</strong>
+    <ul>
+      <li><strong>BIGINT</strong>: CPU 处理整数比较极快，且因为体积小，B+ 树的层级更低，磁盘 I/O 更少。</li>
+      <li><strong>VARCHAR</strong>: 字符串比对慢，且索引占用空间大，导致查询效率下降。</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="3-为什么很多项目在用-stringjs-精度大坑"><span class="me-2">3. 为什么很多项目在用 String？(JS 精度大坑)</span><a href="#3-为什么很多项目在用-stringjs-精度大坑" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>既然 <code class="language-plaintext highlighter-rouge">BIGINT</code> 这么好，为什么很多代码仓里还是用的 <code class="language-plaintext highlighter-rouge">String</code>？</p>
+
+<p>原因是 <strong>JavaScript 的精度丢失问题</strong>。</p>
+
+<ul>
+  <li><strong>Java <code class="language-plaintext highlighter-rouge">Long</code> 最大值</strong>: $2^{63}-1$ (约 $9.22 \times 10^{18}$)</li>
+  <li><strong>JS <code class="language-plaintext highlighter-rouge">Number</code> 最大安全值</strong>: $2^{53}-1$ (约 $9.00 \times 10^{15}$)</li>
+</ul>
+
+<p>雪花算法生成的 ID 通常在 19 位左右，远超 JS 的安全范围。
+如果直接透传 <code class="language-plaintext highlighter-rouge">Long</code> 给前端，<strong>最后几位会被四舍五入或变成 0</strong>，导致前端回传 ID 时找不到数据。</p>
+
+<p><strong>错误示例</strong>:</p>
+
+<div class="language-json highlighter-rouge"><div class="code-header">
+        <span data-label-text="JSON"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="err">//</span><span class="w"> </span><span class="err">后端返回</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1234567890123456789</span><span class="w"> </span><span class="p">}</span><span class="w">
+
+</span><span class="err">//</span><span class="w"> </span><span class="err">前端接收变成</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1234567890123456800</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></div></div>
+
+<h2 id="4-最佳实践各司其职"><span class="me-2">4. 最佳实践：各司其职</span><a href="#4-最佳实践各司其职" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p><strong>不要为了前端的限制而牺牲数据库的性能。</strong></p>
+
+<p>完美的解决方案是：<strong>后端存 Long，前端收 String。</strong></p>
+
+<h3 id="架构设计"><span class="me-2">架构设计</span><a href="#架构设计" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<ol>
+  <li><strong>MySQL</strong>: 使用 BIGINT(20)，保证存储和索引性能。</li>
+  <li><strong>Java Entity</strong>: 使用 Long，保证计算效率。</li>
+  <li><strong>JSON 序列化</strong>: 在返回给前端时，自动将 Long 转为 String。</li>
+</ol>
+
+<h3 id="代码实现-spring-boot--jackson"><span class="me-2">代码实现 (Spring Boot / Jackson)</span><a href="#代码实现-spring-boot--jackson" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<p>我们只需要在 Entity 类的 ID 字段上添加一个注解，即可解决所有问题：</p>
+
+<div class="language-java highlighter-rouge"><div class="code-header">
+        <span data-label-text="Java"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">com.fasterxml.jackson.databind.annotation.JsonSerialize</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.fasterxml.jackson.databind.ser.std.ToStringSerializer</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * 数据库类型: BIGINT
+     * Java 类型: Long
+     * 
+     * @JsonSerialize: 告诉 Jackson 在序列化成 JSON 时，
+     * 使用 ToStringSerializer 将其转为 String 返回给前端。
+     */</span>
+    <span class="nd">@JsonSerialize</span><span class="o">(</span><span class="n">using</span> <span class="o">=</span> <span class="nc">ToStringSerializer</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+
+    <span class="c1">// 其他字段...</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>或者在全局配置 (WebMvcConfigurer) 中统一处理，让所有 Long 类型在序列化时都转为 String。</p>
+
 
   </div>
 
@@ -771,19 +936,19 @@
         <i class="fa fa-tags fa-fw me-1"></i>
         
           <a
-            href="/tags/%E5%B9%B6%E5%8F%91/"
-            class="post-tag no-text-decoration"
-          >并发</a>
-        
-          <a
             href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"
             class="post-tag no-text-decoration"
           >数据库</a>
         
           <a
-            href="/tags/%E5%94%AF%E4%B8%80%E9%94%AE/"
+            href="/tags/%E4%B8%BB%E9%94%AE/"
             class="post-tag no-text-decoration"
-          >唯一键</a>
+          >主键</a>
+        
+          <a
+            href="/tags/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/"
+            class="post-tag no-text-decoration"
+          >雪花算法</a>
         
       </div>
     
@@ -819,28 +984,28 @@
 
       
 
-      <a href="https://twitter.com/intent/tweet?text=%E6%8E%A5%E5%8F%A3%E7%94%9F%E6%88%90%E5%94%AF%E4%B8%80%E9%94%AE%E5%80%BC%E5%AF%B9%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%20-%20Mercury&url=https%3A%2F%2Fmercury419814-stack.github.io%2Fposts%2Funique-key-concurrency-solution%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" aria-label="Twitter">
+      <a href="https://twitter.com/intent/tweet?text=%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E4%B8%BB%E9%94%AE%20BIGINT%20vs%20VARCHAR%20%E9%80%89%E5%9E%8B%20-%20Mercury&url=https%3A%2F%2Fmercury419814-stack.github.io%2Fposts%2Fdb-primary-key-bigint-vs-varchar%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" aria-label="Twitter">
         <i class="fa-fw fa-brands fa-square-x-twitter"></i>
       </a>
     
 
       
 
-      <a href="https://www.facebook.com/sharer/sharer.php?title=%E6%8E%A5%E5%8F%A3%E7%94%9F%E6%88%90%E5%94%AF%E4%B8%80%E9%94%AE%E5%80%BC%E5%AF%B9%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%20-%20Mercury&u=https%3A%2F%2Fmercury419814-stack.github.io%2Fposts%2Funique-key-concurrency-solution%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?title=%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E4%B8%BB%E9%94%AE%20BIGINT%20vs%20VARCHAR%20%E9%80%89%E5%9E%8B%20-%20Mercury&u=https%3A%2F%2Fmercury419814-stack.github.io%2Fposts%2Fdb-primary-key-bigint-vs-varchar%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook">
         <i class="fa-fw fab fa-facebook-square"></i>
       </a>
     
 
       
 
-      <a href="https://t.me/share/url?url=https%3A%2F%2Fmercury419814-stack.github.io%2Fposts%2Funique-key-concurrency-solution%2F&text=%E6%8E%A5%E5%8F%A3%E7%94%9F%E6%88%90%E5%94%AF%E4%B8%80%E9%94%AE%E5%80%BC%E5%AF%B9%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%20-%20Mercury" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" aria-label="Telegram">
+      <a href="https://t.me/share/url?url=https%3A%2F%2Fmercury419814-stack.github.io%2Fposts%2Fdb-primary-key-bigint-vs-varchar%2F&text=%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E4%B8%BB%E9%94%AE%20BIGINT%20vs%20VARCHAR%20%E9%80%89%E5%9E%8B%20-%20Mercury" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" aria-label="Telegram">
         <i class="fa-fw fab fa-telegram"></i>
       </a>
     
 
       
 
-      <a href="https://service.weibo.com/share/share.php?title=%E6%8E%A5%E5%8F%A3%E7%94%9F%E6%88%90%E5%94%AF%E4%B8%80%E9%94%AE%E5%80%BC%E5%AF%B9%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%20-%20Mercury&url=https%3A%2F%2Fmercury419814-stack.github.io%2Fposts%2Funique-key-concurrency-solution%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Weibo" aria-label="Weibo">
+      <a href="https://service.weibo.com/share/share.php?title=%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E4%B8%BB%E9%94%AE%20BIGINT%20vs%20VARCHAR%20%E9%80%89%E5%9E%8B%20-%20Mercury&url=https%3A%2F%2Fmercury419814-stack.github.io%2Fposts%2Fdb-primary-key-bigint-vs-varchar%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Weibo" aria-label="Weibo">
         <i class="fa-fw fab fa-weibo"></i>
       </a>
     
@@ -1208,19 +1373,19 @@
   
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
   
 
   
@@ -1246,6 +1411,34 @@
   <aside id="related-posts" aria-labelledby="related-label">
     <h3 class="mb-4" id="related-label">Further Reading</h3>
     <nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
+      
+        <article class="col">
+          <a href="/posts/unique-key-concurrency-solution/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1772294400"
+  data-df="ll"
+  
+>
+  Mar  1, 2026
+</time>
+
+              <h4 class="pt-0 my-2">接口生成唯一键值对并发问题</h4>
+              <div class="text-muted">
+                <p>1. 场景与问题  在设备管理业务中，设备号（Code）和设备名（Name）要求全局唯一。  常规做法： 采用 Check-Then-Act 模式。先 Select 查询是否存在，不存在则 Insert。  问题： 在高并发场景下，存在竞态条件（Race Condition）。两个线程可能同时查到”不存在”，然后同时执行插入。此时依赖数据库的 Unique Key 约束兜底，数据库会抛出异常...</p>
+              </div>
+            </div>
+          </a>
+        </article>
       
         <article class="col">
           <a href="/posts/java-counter-volatile-atomic/" class="post-preview card h-100">
@@ -1275,34 +1468,6 @@
           </a>
         </article>
       
-        <article class="col">
-          <a href="/posts/db-primary-key-bigint-vs-varchar/" class="post-preview card h-100">
-            <div class="card-body">
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1772467200"
-  data-df="ll"
-  
->
-  Mar  3, 2026
-</time>
-
-              <h4 class="pt-0 my-2">数据库表主键 BIGINT vs VARCHAR 选型</h4>
-              <div class="text-muted">
-                <p>在分布式系统中，雪花算法（Snowflake）是生成全局唯一 ID 的主流方案。但在数据库建表和 Java 代码实现时经常面临一个选择：**ID 到底该用 `BIGINT` (Long) 还是 `VARCHAR` (String)？**  ## 1. 核心矛盾：性能 vs 兼容性  这个问题的本质，是**数据库存储性能**与**前端语言兼容性**之间的博弈。  ### 方案 A：使用 BIG...</p>
-              </div>
-            </div>
-          </a>
-        </article>
-      
     </nav>
   </aside>
   <!-- #related-posts -->
@@ -1317,18 +1482,22 @@
   
 
   
-    <div class="btn btn-outline-primary disabled" aria-label="Older">
-      <p>-</p>
-    </div>
+    <a
+      href="/posts/unique-key-concurrency-solution/"
+      class="btn btn-outline-primary"
+      aria-label="Older"
+    >
+      <p>接口生成唯一键值对并发问题</p>
+    </a>
   
 
   
     <a
-      href="/posts/db-primary-key-bigint-vs-varchar/"
+      href="/posts/java-counter-volatile-atomic/"
       class="btn btn-outline-primary"
       aria-label="Newer"
     >
-      <p>数据库表主键 BIGINT vs VARCHAR 选型</p>
+      <p>Java 并发代码 snippet 分析：Counter 与 volatile</p>
     </a>
   
 </nav>

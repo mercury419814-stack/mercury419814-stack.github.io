@@ -1,10 +1,28 @@
 [
   
   {
+    "title": "Java 并发代码 snippet 分析：Counter 与 volatile",
+    "url": "/posts/java-counter-volatile-atomic/",
+    "categories": "工作总结",
+    "tags": "并发, java, volatile",
+    "date": "2026-03-03 00:00:00 +0800",
+    "content": "public class Counter { \tprivate int count = 0; \t \tprivate boolean stopped = false; \t \tpublic void increment() { \t\tif (!stopped) { \t\t\tcount = count + 1; \t\t} \t} \t \tpublic void stop() { \t\tstopped = true; \t} \t \tpublic int getCount() { \t\treturn count; \t}  }   1. 关于 count 的竞态条件（Race Condition）  count++ 实际上包含了三个步骤：     Read: 从主内存读取 count 到工作内存。   Modify: 在 CPU 寄存器中执行 +1 操作。   Write: 将新值写回工作内存。   如果没有锁，两个线程可能同时读取到 0，都计算出 1，写入后 count 变成了 1（本该是 2）。即多线程并发时会出现丢失更新，导致结果比预期小的情况。  2. 关于 stopped 的可见性与重排序（Visibility &amp; Reordering）  stopped 变量在没有同步措施时，修改可能对其他线程不可见（读不到最新的值），或者因为指令重排序导致读取逻辑错误。建议加 volatile。  在 Java 内存模型（JMM）中，没有 volatile 修饰的变量，线程可能会一直从自己的**CPU 缓存（工作内存）中读取 stopped 的旧值（false），导致 stop() 方法虽然被调用了，但循环或判断迟迟停不下来。volatile 保证了可见性（立即刷新回主内存）和有序性（禁止指令重排序）。  更优解是使用 Atomic 类，AtomicInteger 使用 CAS（Compare-And-Swap）非阻塞算法，性能通常优于 synchronized。  即，修改成这样就行：  // 使用原子类保证 increment 的原子性 private AtomicInteger count = new AtomicInteger(0);      // 使用 volatile 保证可见性 private volatile boolean stopped = false;   要区分 “赋值操作” 和 “复合操作（Read-Modify-Write）”。          复合操作（危险）：      比如 count++ 或者 flag = !flag（取反）。             这种操作依赖于变量的旧值。       多线程同时做这个操作，会出现竞态条件。       结论：这种场景下，volatile 确实不够，必须用 Atomic 类或锁。                纯赋值操作（安全）：      看一下你的代码：      public void stop() {      stopped = true; // 这是一个单纯的赋值，不依赖 stopped 原来的值  }             无论多少个线程同时调用 stop()，它们做的动作都是把 stopped 变成 true。       如果不依赖旧值（即不需要“先读旧值，再计算，再写新值”），那么这个操作本身就是原子的（Java 规范保证了对 boolean、int 等引用的赋值是原子的）。       既然赋值已经是原子的，我们唯一剩下的问题就是可见性（其他线程能不能立马看到）。       结论：volatile 解决了可见性问题，所以这就够了。           "
+  },
+  
+  {
+    "title": "数据库表主键 BIGINT vs VARCHAR 选型",
+    "url": "/posts/db-primary-key-bigint-vs-varchar/",
+    "categories": "工作总结",
+    "tags": "数据库, 主键, 雪花算法",
+    "date": "2026-03-03 00:00:00 +0800",
+    "content": "在分布式系统中，雪花算法（Snowflake）是生成全局唯一 ID 的主流方案。但在数据库建表和 Java 代码实现时经常面临一个选择：ID 到底该用 BIGINT (Long) 还是 VARCHAR (String)？  1. 核心矛盾：性能 vs 兼容性  这个问题的本质，是数据库存储性能与前端语言兼容性之间的博弈。  方案 A：使用 BIGINT (Long)  这是数据库层面的最优解，但对前端（JavaScript）不友好。     MySQL: BIGINT(20)   Java: java.lang.Long   方案 B：使用 VARCHAR (String)  这是为了迁就前端的“偷懒”解法，牺牲了数据库性能。     MySQL: VARCHAR(20)   Java: java.lang.String     2. 为什么数据库层面 BIGINT 完胜？  从 DBA 和后端架构的角度来看，必须使用 BIGINT，原因如下：     存储空间 (Storage)            BIGINT: 固定占用 8 字节。       VARCHAR: 雪花 ID 为 19 位，存储需要 19 字节 + 1 字节长度标识 = 20 字节。       结论: String 的空间消耗是 Long 的 2.5 倍。这不仅浪费磁盘，更浪费宝贵的内存（Buffer Pool 能缓存的索引页变少）。           索引效率 (Index Performance)            BIGINT: CPU 处理整数比较极快，且因为体积小，B+ 树的层级更低，磁盘 I/O 更少。       VARCHAR: 字符串比对慢，且索引占用空间大，导致查询效率下降。             3. 为什么很多项目在用 String？(JS 精度大坑)  既然 BIGINT 这么好，为什么很多代码仓里还是用的 String？  原因是 JavaScript 的精度丢失问题。     Java Long 最大值: $2^{63}-1$ (约 $9.22 \\times 10^{18}$)   JS Number 最大安全值: $2^{53}-1$ (约 $9.00 \\times 10^{15}$)   雪花算法生成的 ID 通常在 19 位左右，远超 JS 的安全范围。 如果直接透传 Long 给前端，最后几位会被四舍五入或变成 0，导致前端回传 ID 时找不到数据。  错误示例:  // 后端返回 { \"id\": 1234567890123456789 }  // 前端接收变成 { \"id\": 1234567890123456800 }   4. 最佳实践：各司其职  不要为了前端的限制而牺牲数据库的性能。  完美的解决方案是：后端存 Long，前端收 String。  架构设计     MySQL: 使用 BIGINT(20)，保证存储和索引性能。   Java Entity: 使用 Long，保证计算效率。   JSON 序列化: 在返回给前端时，自动将 Long 转为 String。   代码实现 (Spring Boot / Jackson)  我们只需要在 Entity 类的 ID 字段上添加一个注解，即可解决所有问题：  import com.fasterxml.jackson.databind.annotation.JsonSerialize; import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;  public class User {      /**      * 数据库类型: BIGINT      * Java 类型: Long      *       * @JsonSerialize: 告诉 Jackson 在序列化成 JSON 时，      * 使用 ToStringSerializer 将其转为 String 返回给前端。      */     @JsonSerialize(using = ToStringSerializer.class)     private Long id;      // 其他字段... }   或者在全局配置 (WebMvcConfigurer) 中统一处理，让所有 Long 类型在序列化时都转为 String。  "
+  },
+  
+  {
     "title": "接口生成唯一键值对并发问题",
     "url": "/posts/unique-key-concurrency-solution/",
     "categories": "工作总结",
-    "tags": "并发, 数据库, MySQL, Redis, 高并发, 唯一键, InnoDB",
+    "tags": "并发, 数据库, 唯一键",
     "date": "2026-03-01 00:00:00 +0800",
     "content": "1. 场景与问题  在设备管理业务中，设备号（Code）和设备名（Name）要求全局唯一。  常规做法： 采用 Check-Then-Act 模式。先 Select 查询是否存在，不存在则 Insert。  问题： 在高并发场景下，存在竞态条件（Race Condition）。两个线程可能同时查到”不存在”，然后同时执行插入。此时依赖数据库的 Unique Key 约束兜底，数据库会抛出异常（如 MySQL 的 Error 1062）。  2. 解决方案分级          Level 1（常规）：数据库兜底 + 异常转换      对于并发度不高的 B 端业务，这种冲突概率极低。我们可以捕获 DuplicateKeyException，将其包装为自定义的业务异常（如 BusinessException(“设备号已存在”)）抛给前端。      注意：虽然简单，但高频的唯一键冲突会导致 InnoDB 产生大量的间隙锁（Gap Locks），在极端并发下有死锁风险，且异常堆栈构建消耗 CPU。           Level 2（高并发）：前置防御      如果业务对并发要求极高（如秒杀抢注），为了保护数据库，可以使用 Redis 分布式锁 或 布隆过滤器 进行前置拦截，将压力挡在数据库之外。      3. 关于自增主键的思考  对于像”管道编号”这类没有严格业务含义、只要求唯一的字段，直接使用数据库的自增主键是最佳选择。  原理分析：     安全性： 获取自增 ID 的操作是原子的。   性能： 在 innodb_autoinc_lock_mode=1（默认）下，对于简单的 Insert 语句，InnoDB 使用的是轻量级的互斥量（Mutex），分配完 ID 后立刻释放，不需要等待事务提交，性能极高。   副作用： 即使事务回滚，已申请的 ID 不会退还，因此自增 ID 可能会出现不连续（断层） 的现象，但这在非业务强相关的场景下完全可以接受。  "
   }
