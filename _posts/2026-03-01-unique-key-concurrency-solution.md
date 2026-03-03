@@ -1,7 +1,7 @@
 ---
 title: 接口生成唯一键值对并发问题
 categories: [工作总结]
-tags: [并发, 数据库, MySQL, Redis, 高并发, 唯一键, InnoDB]
+tags: [并发, 数据库, 唯一键]
 ---
 
 ### 1. 场景与问题
